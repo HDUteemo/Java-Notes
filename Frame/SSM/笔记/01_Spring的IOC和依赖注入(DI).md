@@ -460,6 +460,38 @@ public class UserDaoImpl implements UserDao {
 
 
 
+又比如一个`List<User>`的注入
+
+```java
+<bean id="userDao" class="com.huawei.impl.UserDaoImpl" scope="prototype">
+    <property name="userList">
+        <list>
+            <ref bean="u1"></ref>
+            <ref bean="u2"></ref>
+        </list>
+    </property>
+</bean>
+
+<bean id="u1" class="com.huawei.domain.User">
+	<property name="name" value="zhangsan"/>
+	<property name="age" value="19"/>
+</bean>
+<bean id="u2" class="com.huawei.domain.User">
+	<property name="name" value="lisi"/>
+	<property name="age" value="20"/>
+</bean>
+```
+
+
+
+打印输出：
+
+```
+[User{name='zhangsan', age=19}, User{name='lisi', age=20}]
+```
+
+
+
 > 通过`<ref/>`标签的`bean`属性指定目标 bean 是最通用的形式，并且允许创建对同一容器或父容器中任何 bean 的引用，而不管它是否在同一 XML 文件中。 `bean`属性的值可以与目标 Bean 的`id`属性相同，也可以与目标 Bean 的`name`属性中的值之一相同。
 
 
@@ -492,6 +524,43 @@ Map, Set, Properties注入如下：
     </property>
 </bean>
 ```
+
+
+
+使用构造器注入参考以下：
+
+```xml
+<bean id="userDao" class="com.huawei.impl.UserDaoImpl" scope="prototype">
+    <constructor-arg name="list">
+        <list>
+            <value>aaa</value>
+            <value>bbb</value>
+        </list>
+    </constructor-arg>
+    <constructor-arg name="userList">
+        <list>
+            <ref bean="u1"/>
+            <ref bean="u2"/>
+        </list>
+    </constructor-arg>
+    <constructor-arg name="someSet">
+        <set>
+            <ref bean="u1"></ref>
+            <value>11</value>
+        </set>
+    </constructor-arg>
+</bean>
+<bean id="u1" class="com.huawei.domain.User">
+    <property name="name" value="zhangsan"/>
+    <property name="age" value="19"/>
+</bean>
+<bean id="u2" class="com.huawei.domain.User">
+    <property name="name" value="lisi"/>
+    <property name="age" value="20"/>
+</bean>
+```
+
+
 
 ## 3.6 引入其他配置文件（分模块开发） 
 
